@@ -1,0 +1,172 @@
+[
+    {
+        "name": "El Rastro",
+        "opening_hours": {
+            "mo": [],
+            "tu": [],
+            "we": [],
+            "th": [],
+            "fr": [],
+            "sa": [],
+            "su": ["09:00-15:00"]
+        },
+        "hours_spent": 2.5,
+        "category": "shopping",
+        "location": "outdoors",
+        "district": "Centro",
+        "latlng": [40.4087357,-3.7081466]
+    },
+    {
+        "name": "Palacio Real",
+        "opening_hours": {
+            "mo": ["10:00-20:00"],
+            "tu": ["10:00-20:00"],
+            "we": ["10:00-20:00"],
+            "th": ["10:00-20:00"],
+            "fr": ["10:00-20:00"],
+            "sa": ["10:00-20:00"],
+            "su": ["10:00-20:00"]
+        },
+        "hours_spent": 1.5,
+        "category": "cultural",
+        "location": "outdoors",
+        "district": "Centro",
+        "latlng": [40.4173423,-3.7144063]
+    },
+    {
+        "name": "El Retiro",
+        "opening_hours": {
+            "mo": ["00:00-23:59"],
+            "tu": ["00:00-23:59"],
+            "we": ["00:00-23:59"],
+            "th": ["00:00-23:59"],
+            "fr": ["00:00-23:59"],
+            "sa": ["00:00-23:59"],
+            "su": ["00:00-23:59"]
+        },
+        "hours_spent": 1.5,
+        "category": "nature",
+        "location": "outdoors",
+        "district": "Retiro",
+        "latlng": [40.4154589,-3.6834559]
+    },
+    {
+        "name": "Casa de Campo",
+        "opening_hours": {
+            "mo": ["00:00-23:59"],
+            "tu": ["00:00-23:59"],
+            "we": ["00:00-23:59"],
+            "th": ["00:00-23:59"],
+            "fr": ["00:00-23:59"],
+            "sa": ["00:00-23:59"],
+            "su": ["00:00-23:59"]
+        },
+        "hours_spent": 3,
+        "category": "nature",
+        "location": "outdoors",
+        "district": "Latina",
+        "latlng": [40.4202185,-3.7481842]
+    },
+    {
+        "name": "Gran Vía",
+        "opening_hours": {
+            "mo": ["00:00-23:59"],
+            "tu": ["00:00-23:59"],
+            "we": ["00:00-23:59"],
+            "th": ["00:00-23:59"],
+            "fr": ["00:00-23:59"],
+            "sa": ["00:00-23:59"],
+            "su": ["00:00-23:59"]
+        },
+        "hours_spent": 1,
+        "category": "shopping",
+        "location": "outdoors",
+        "district": "Centro",
+        "latlng": [40.4199837,-3.7054455]
+    },
+    {
+        "name": "ECI Nuevos Ministerios",
+        "opening_hours": {
+            "mo": ["10:00-22:00"],
+            "tu": ["10:00-22:00"],
+            "we": ["10:00-22:00"],
+            "th": ["10:00-22:00"],
+            "fr": ["10:00-22:00"],
+            "sa": ["10:00-22:00"],
+            "su": ["10:00-22:00"]
+        },
+        "hours_spent": 2,
+        "category": "shopping",
+        "location": "indoors",
+        "district": "Chamberí",
+        "latlng": [40.4471904,-3.6932923]
+    },
+    {
+        "name": "Teatros del Canal",
+        "opening_hours": {
+            "mo": ["14:30-21:00"],
+            "tu": ["14:30-21:00"],
+            "we": ["14:30-21:00"],
+            "th": ["14:30-21:00"],
+            "fr": ["14:30-21:00"],
+            "sa": ["14:30-21:00"],
+            "su": ["14:30-21:00"]
+        },
+        "hours_spent": 1,
+        "category": "cultural",
+        "location": "indoors",
+        "district": "Chamberí",
+        "latlng": [40.4381495,-3.7052218]
+    },
+    {
+        "name": "Museo Nacional del Prado",
+        "opening_hours": {
+            "mo": ["10:00-20:00"],
+            "tu": ["10:00-20:00"],
+            "we": ["10:00-20:00"],
+            "th": ["10:00-20:00"],
+            "fr": ["10:00-20:00"],
+            "sa": ["10:00-20:00"],
+            "su": ["10:00-19:00"]
+        },
+        "hours_spent": 3,
+        "category": "cultural",
+        "location": "indoors",
+        "district": "Retiro",
+        "latlng": [40.413679,-3.6915639]
+    },
+    {
+        "name": "Parque del Oeste",
+        "opening_hours": {
+            "mo": ["00:00-23:59"],
+            "tu": ["00:00-23:59"],
+            "we": ["00:00-23:59"],
+            "th": ["00:00-23:59"],
+            "fr": ["00:00-23:59"],
+            "sa": ["00:00-23:59"],
+            "su": ["00:00-23:59"]
+        },
+        "hours_spent": 1,
+        "category": "nature",
+        "location": "outdoors",
+        "district": "Chamberí",
+        "latlng": [40.4273119,-3.7223896]
+    },
+    {
+        "name": "Templo de Debod",
+        "opening_hours": {
+            "mo": ["00:00-23:59"],
+            "tu": ["00:00-23:59"],
+            "we": ["00:00-23:59"],
+            "th": ["00:00-23:59"],
+            "fr": ["00:00-23:59"],
+            "sa": ["00:00-23:59"],
+            "su": ["00:00-23:59"]
+        },
+        "hours_spent": 0.5,
+        "category": "cultural",
+        "location": "outdoors",
+        "district": "Chamberí",
+        "latlng": [40.4244109,-3.7178539]
+    }
+]

@@ -22,7 +22,9 @@
   ;; If you use HTTP/2 or ALPN, use the java-agent to pull in the correct alpn-boot dependency
   ;:java-agents [[org.mortbay.jetty.alpn/jetty-alpn-agent "2.0.5"]]
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "carto-challenge.server/run-dev"]}
+                   :resource-paths ["test-resources"]
                    :dependencies [[io.pedestal/pedestal.service-tools "0.5.4"]]}
+             :test {:resource-paths ["test-resources"]}
              :uberjar {:aot [carto-challenge.server]}}
   :main ^{:skip-aot true} carto-challenge.server)
 
