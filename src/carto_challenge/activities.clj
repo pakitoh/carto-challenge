@@ -1,53 +1,62 @@
 (ns carto-challenge.activities
-  (:require [carto-challenge.data :as d]
-            [carto-challenge.activities :as act]))
+  (:require [carto-challenge.data :as data]
+            [carto-challenge.transform :as tr]
+            [clojure.string :as s]
+            [java-time :as t]))
 
-(defn transform [act]
-  {:type "Feature"
-   :geometry {:type "Point" :coordinates (reverse (:latlng act))}
-   :properties (dissoc act :latlng)})
+(def activities
+  (map tr/transform data/activities))
 
-(def features
-  (map transform d/activities))
-
-(defn exclude [key-to-exclude excluded-values feature]
-  (let [value (get-in feature [:properties key-to-exclude])]
+(defn- exclude-filter [key-to-exclude excluded-values activity]
+  (let [value (get-in activity [:properties key-to-exclude])]
     (not-any? #(= value %) excluded-values)))
 
-(defn compose-filters [filters]
+(defn- compose-filters [filters]
   (if (empty? filters)
-    identity 
+    identity
     (apply every-pred filters)))
 
-(defn filter-activities [filters features]
-  (filter (compose-filters filters) features))
+(defn- filter-activities [filters activities]
+  (filter (compose-filters filters) activities))
 
+(defn find-activities [categories-to-exclude
+                       locations-to-exclude
+                       districts-to-exclude
+                       activities]
+  (let [exclude-by-category-filter (fn [activity] (exclude-filter :category categories-to-exclude activity))
+        exclude-by-location-filter (fn [activity] (exclude-filter :location locations-to-exclude activity))
+        exclude-by-district-filter (fn [activity] (exclude-filter :district districts-to-exclude activity))
+        filters [exclude-by-category-filter exclude-by-location-filter exclude-by-district-filter]]
+    (filter-activities filters activities)))
 
+(def days {1 :mo
+           2 :tu
+           3 :we
+           4 :th
+           5 :fr
+           6 :sa
+           7 :su})
 
+(defn- filter-by-time [start-time end-time date activity]
+  (if-let [opening-hours (get-in activity [:properties :opening_hours])]
+    (let [searching-from (t/local-time start-time)
+          searching-to   (t/local-time end-time)
+          day-of-week    (days (t/as date :day-of-week))
+          opened-at      (t/local-time (get-in opening-hours [day-of-week :open]))
+          closed-at      (t/local-time (get-in opening-hours [day-of-week :close]))
+          hours-spent    (get-in activity [:properties :hours_spent])]
+        (and (t/after? searching-from opened-at)
+             (t/before? searching-to closed-at)
+             (t/before? (t/plus searching-from (t/hours hours-spent)) closed-at)))
+    false))
 
-
-
-
-;(def filters [
-;              #(act/exclude :location ["indoors"] %)
-;              #(act/exclude :category ["shopping"] %)]
-;  ])
-
-
-
-;(defn exclude-by-category-filter [categories-to-exclude]
-;  (fn [feature] (act/exclude :category categories-to-exclude)))
-
-
-
-(defn find-features [categories-to-exclude
-                     locations-to-exclude
-                     districts-to-exclude
-                     features]
-  (let [filters [#(act/exclude :category categories-to-exclude %)
-                 #(act/exclude :location locations-to-exclude %)
-                 #(act/exclude :district districts-to-exclude %)]]
-        (filter-activities filters features)))
-
-
+(defn recommendations [category start-time end-time date activities]
+  (let [include-category-filter (fn [activity] (= category (get-in activity [:properties :category])))
+        time-filter             (fn [activity] (filter-by-time start-time end-time date activity))
+        filters                 [include-category-filter time-filter]
+        more-time-spent-sorter  (fn [activity] (get-in activity [:properties :hours_spent]))]
+    (->> activities
+         (filter (compose-filters filters))
+         (sort-by more-time-spent-sorter >)
+         (first))))
 
