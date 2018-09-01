@@ -13,11 +13,11 @@
 (def data-files
   (files folder))
 
-(defn load [file]
-  (-> file
+(defn load-datafile [datafile]
+  (-> datafile
       (slurp)
       (json/read-str :key-fn keyword)))
 
 (def activities
-  (mapcat load data-files))
+  (mapcat load-datafile data-files))
 
