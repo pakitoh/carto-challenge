@@ -38,16 +38,15 @@
            7 :su})
 
 (defn- filter-by-time [start-time end-time date activity]
-  (if-let [opening-hours (get-in activity [:properties :opening_hours])]
+  (if-let [opening-hours (get-in activity [:properties :opening_hours (days (t/as date :day-of-week))])]
     (let [searching-from (t/local-time start-time)
           searching-to   (t/local-time end-time)
-          day-of-week    (days (t/as date :day-of-week))
-          opened-at      (t/local-time (get-in opening-hours [day-of-week :open]))
-          closed-at      (t/local-time (get-in opening-hours [day-of-week :close]))
+          opened-at      (t/local-time (:open opening-hours))
+          closed-at      (t/local-time (:close opening-hours))
           hours-spent    (get-in activity [:properties :hours_spent])]
-        (and (t/after? searching-from opened-at)
-             (t/before? searching-to closed-at)
-             (t/before? (t/plus searching-from (t/hours hours-spent)) closed-at)))
+      (and (t/after? searching-from opened-at)
+           (t/before? searching-to closed-at)
+           (t/before? (t/plus (t/max searching-from opened-at) (t/hours hours-spent)) (t/min searching-to closed-at))))
     false))
 
 (defn recommendations [category start-time end-time date activities]

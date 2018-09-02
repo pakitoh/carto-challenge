@@ -82,8 +82,25 @@
              (get-in
               (act/recommendations "shopping"
                                    "10:00"
-                                   "11:00"
+                                   "14:00"
                                    (t/local-date 2018 9 2)
                                    test-activities)
-              [:properties :name]))))))
+              [:properties :name]))))
+    (testing "Doesn't return an activity if we don't have enough time to the visit because our range"
+      (is (= "Gran Vía"
+             (get-in (act/recommendations "shopping"
+                                          "10:00"
+                                          "12:00"
+                                          (t/local-date 2018 9 2)
+                                          test-activities)
+                     [:properties :name]))))
+    (testing "Doesn't return an activity if we don't have enough time to the visit because the closing time"
+      (is (= "Gran Vía"
+             (get-in (act/recommendations "shopping"
+                                          "14:00"
+                                          "19:00"
+                                          (t/local-date 2018 9 2)
+                                          test-activities)
+                     [:properties :name]))))))
+
 
