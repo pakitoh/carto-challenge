@@ -2,7 +2,11 @@
   (:require [io.pedestal.http :as http]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
-            [ring.util.response :as ring-resp]))
+            [ring.util.response :as ring-resp]
+            [carto-challenge.activities :as act]
+            [carto-challenge.data :as d]
+            [java-time :as t]
+            [clojure.data.json :as json]))
 
 (defn about-page
   [request]
@@ -10,9 +14,39 @@
                               (clojure-version)
                               (route/url-for ::about-page))))
 
-(defn home-page
-  [request]
-  (ring-resp/response "Hello World!"))
+(defn- normalize-input [input]
+  (if (vector? input)
+    input
+    (conj [] input)))
+
+(defn- normalize-output [key value]
+  (if (nil? value) "-" value))
+
+(defn- json-response [activities]
+  (ring-resp/response
+   (json/write-str activities
+                   :value-fn normalize-output)))
+
+(defn activities-page [request]
+  (let [exclude-category (get-in request [:query-params :excludeCategory])
+        exclude-location (get-in request [:query-params :excludeLocation])
+        exclude-district (get-in request [:query-params :excludeDistrict])]
+    (json-response
+     (act/find-activities (normalize-input exclude-category)
+                          (normalize-input exclude-location)
+                          (normalize-input exclude-district)
+                          act/activities))))
+
+(defn recommendations-page [request]
+  (let [start (get-in request [:query-params :start])
+        end (get-in request [:query-params :end])
+        category (get-in request [:query-params :category])]
+    (json-response
+     (act/recommendations category
+                          start
+                          end
+                          (t/local-date)
+                          act/activities))))
 
 ;; Defines "/" and "/about" routes with their associated :get handlers.
 ;; The interceptors defined after the verb map (e.g., {:get home-page}
@@ -20,7 +54,8 @@
 (def common-interceptors [(body-params/body-params) http/html-body])
 
 ;; Tabular routes
-(def routes #{["/" :get (conj common-interceptors `home-page)]
+(def routes #{["/activities" :get (conj common-interceptors `activities-page)]
+              ["/recommendations" :get (conj common-interceptors `recommendations-page)]
               ["/about" :get (conj common-interceptors `about-page)]})
 
 ;; Map-based routes
