@@ -56,15 +56,15 @@
 (deftest test-find-activities
   (testing "Find activities function. "
     (testing "Return all activities if no exclusions"
-      (is (= 3 (count (act/find-activities nil nil nil test-activities)))))
+      (is (= 3 (count (:features (act/find-activities nil nil nil test-activities))))))
     (testing "We exclude by category"
-      (is (= 1 (count (act/find-activities ["shopping"] nil nil test-activities)))))
+      (is (= 1 (count (:features (act/find-activities ["shopping"] nil nil test-activities))))))
     (testing "We exclude by multiple categories"
-      (is (= 0 (count (act/find-activities ["shopping" "cultural"] nil nil test-activities)))))
+      (is (= 0 (count (:features (act/find-activities ["shopping" "cultural"] nil nil test-activities))))))
     (testing "We exclude by location"
-      (is (= 0 (count (act/find-activities nil ["outdoors"] nil test-activities)))))
+      (is (= 0 (count (:features (act/find-activities nil ["outdoors"] nil test-activities))))))
     (testing "We exclude by district"
-      (is (= 0 (count (act/find-activities nil nil ["Centro"] test-activities)))))))
+      (is (= 0 (count (:features (act/find-activities nil nil ["Centro"] test-activities))))))))
 
 (deftest test-recommendations
   (testing "Recommendations function. "

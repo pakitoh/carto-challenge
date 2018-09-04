@@ -17,7 +17,11 @@
     (apply every-pred filters)))
 
 (defn- filter-activities [filters activities]
-  (filter (compose-filters filters) activities))
+  (filterv (compose-filters filters) activities))
+
+(defn- collect [activities]
+  {:type "FeatureCollection"
+   :features activities})
 
 (defn find-activities [categories-to-exclude
                        locations-to-exclude
@@ -27,7 +31,7 @@
         exclude-by-location-filter (fn [activity] (exclude-filter :location locations-to-exclude activity))
         exclude-by-district-filter (fn [activity] (exclude-filter :district districts-to-exclude activity))
         filters [exclude-by-category-filter exclude-by-location-filter exclude-by-district-filter]]
-    (filter-activities filters activities)))
+     (collect (filter-activities filters activities))))
 
 (def days {1 :mo
            2 :tu
