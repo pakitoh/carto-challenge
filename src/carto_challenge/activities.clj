@@ -43,10 +43,8 @@
         opened-at      (t/local-time (:open opening-hours))
         closed-at      (t/local-time (:close opening-hours))
         hours-spent    (get-in activity [:properties :hours_spent])]
-    (and (t/after? searching-from opened-at)
-         (t/before? searching-to closed-at)
-         (t/before? (t/plus (t/max searching-from opened-at) (t/hours hours-spent))
-                    (t/min searching-to closed-at)))))
+     (t/before? (t/plus (t/max searching-from opened-at) (t/hours hours-spent))
+                (t/min searching-to closed-at))))
 
 (defn- filter-by-time [start-time end-time date activity]
   (if-let [opening-hours (get-in activity [:properties :opening_hours (days (t/as date :day-of-week))])]

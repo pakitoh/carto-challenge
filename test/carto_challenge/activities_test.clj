@@ -77,6 +77,15 @@
                                     (t/local-date 2018 9 2)
                                     test-activities)
                [:properties :name]))))
+    (testing "Returns the activity when the searching range is wider than the opening range. "
+      (is (=  "El Rastro"
+              (get-in
+               (act/recommendations "shopping"
+                                    "07:00"
+                                    "17:00"
+                                    (t/local-date 2018 9 2)
+                                    test-activities)
+               [:properties :name]))))
     (testing "Returns the longest one when there is more than one available option. "
       (is (= "El Rastro"
              (get-in
@@ -102,5 +111,4 @@
                                           (t/local-date 2018 9 2)
                                           test-activities)
                      [:properties :name]))))))
-
 
