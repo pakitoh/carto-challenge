@@ -12,65 +12,72 @@ As we can read in the Leiningen page:
 > 4. Run it (lein) and it will download the self-install package
 
 To check if Leiningen is installed we can run in a shell console: *lein version*
-> $> lein version 
-> Leiningen 2.8.1 on Java 1.8.0_171 OpenJDK 64-Bit Server VM
+```
+$> lein version 
+Leiningen 2.8.1 on Java 1.8.0_171 OpenJDK 64-Bit Server VM
+```
 
 If we want to run the tests: *lein test*
-> $> lein test
-> 
-> lein test carto-challenge.activities-test
-> 
-> lein test carto-challenge.data-test
-> 
-> lein test carto-challenge.service-test
-> INFO  io.pedestal.http  - {:msg "GET /about", :line 80}
-> INFO  io.pedestal.http  - {:msg "GET /about", :line 80}
-> INFO  io.pedestal.http  - {:msg "GET /activities", :line 80}
-> 
-> lein test carto-challenge.transform-test
-> 
-> Ran 6 tests containing 18 assertions.
-> 0 failures, 0 errors.
+```
+$> lein test
+ 
+lein test carto-challenge.activities-test
+
+lein test carto-challenge.data-test
+
+lein test carto-challenge.service-test
+INFO  io.pedestal.http  - {:msg "GET /about", :line 80}
+INFO  io.pedestal.http  - {:msg "GET /about", :line 80}
+INFO  io.pedestal.http  - {:msg "GET /activities", :line 80}
+ 
+lein test carto-challenge.transform-test
+
+Ran 6 tests containing 18 assertions.
+0 failures, 0 errors.
+```
 
 And if we want to start the application: *lein run*
-> $> lein run
-> INFO  org.eclipse.jetty.util.log  - Logging initialized @11449ms to org.eclipse.jetty.util.log.Slf4jLog
-> 
-> Creating your server...
-> INFO  org.eclipse.jetty.server.Server  - jetty-9.4.10.v20180503; built: 2018-05-03T15:56:21.710Z; git: daa59876e6f384329b122929e70a80934569428c; jvm 1.8.0_171-8u171-b11-2-b11
-> INFO  o.e.j.server.handler.ContextHandler  - Started o.e.j.s.ServletContextHandler@29ab7ccc{/,null,AVAILABLE}
-> INFO  o.e.jetty.server.AbstractConnector  - Started ServerConnector@13bd25ab{HTTP/1.1,[http/1.1, h2c]}{localhost:8080}
-> INFO  org.eclipse.jetty.server.Server  - Started @11660ms
+```
+$> lein run
+INFO  org.eclipse.jetty.util.log  - Logging initialized @11449ms to org.eclipse.jetty.util.log.Slf4jLog
+
+Creating your server...
+INFO  org.eclipse.jetty.server.Server  - jetty-9.4.10.v20180503; built: 2018-05-03T15:56:21.710Z; git: daa59876e6f384329b122929e70a80934569428c; jvm 1.8.0_171-8u171-b11-2-b11
+INFO  o.e.j.server.handler.ContextHandler  - Started o.e.j.s.ServletContextHandler@29ab7ccc{/,null,AVAILABLE}
+INFO  o.e.jetty.server.AbstractConnector  - Started ServerConnector@13bd25ab{HTTP/1.1,[http/1.1, h2c]}{localhost:8080}
+INFO  org.eclipse.jetty.server.Server  - Started @11660ms
  
 You can hit Ctr+C to stop the server
+```
 
 ### Using curl to manually test the system
 
-> $> curl http://localhost:8080/activities
-> $> curl http://localhost:8080/activities?excludeCategory=cultura
-> $> curl http://localhost:8080/activities?excludeCategory=cultura&excludeCategory=nature
-> $> curl http://localhost:8080/activities?excludeDistrict=Centro
-> $> curl http://localhost:8080/activities?excludeCategory=cultura&excludeDistrict=Centro
-> $> curl http://localhost:8080/activities?excludeCategory=cultura&excludeCategory=nature&excludeLocation=outdoors
-> $> curl http://localhost:8080/recommendations?category=cultural&start=11:00&end=15:00
-
+```
+$> curl http://localhost:8080/activities
+$> curl http://localhost:8080/activities?excludeCategory=cultura
+$> curl http://localhost:8080/activities?excludeCategory=cultura&excludeCategory=nature
+$> curl http://localhost:8080/activities?excludeDistrict=Centro
+$> curl http://localhost:8080/activities?excludeCategory=cultura&excludeDistrict=Centro
+$> curl http://localhost:8080/activities?excludeCategory=cultura&excludeCategory=nature&excludeLocation=outdoors
+$> curl http://localhost:8080/recommendations?category=cultural&start=11:00&end=15:00
+```
 ## The challenge
 
 First steps for a bigger project.
 Write down notes decribing the development process:
 - Explain tradeoffs.
 - Describe how do I structure my code.
-Subgoal = Keep an eye on future:
-- More complex rules in the recomendation engine.
-- More cities.
-- More operations in the endpoints.
+- Subgoal = Keep an eye on future:
+  * More complex rules in the recomendation engine.
+  * More cities.
+  * More operations in the endpoints.
 Make it easy to run and test.
 
 ## Step 1: Read the problem carefully and extract information
 
-Business domain is travels/holidays/vacations.
-The goal is to develop a web API about activities.
-The data we will use is about Madrid. The future will include more cities.
+- Business domain is travels/holidays/vacations.
+- The goal is to develop a web API about activities.
+- The data we will use is about Madrid. The future will include more cities.
 
 ### Requirements
 
@@ -118,9 +125,9 @@ I also guess that it will be more exotic to read a solution in a not-so-common l
 
 ### Data
 
-The amount of data is tiny so thinking on adding anothere piece of infrastructure to the solution seems overarchitecture it. Even an in-memory database seems too much.
-The requirements is to read the data file just once.
-Bearing in mind that we want to add more cities in the future, instead of reading directly the file it will be good to configure a data folder and read all the existing files from there.
+- The requirement is to read the data file just once.
+- The amount of data is tiny so thinking on adding anothere piece of infrastructure to the solution seems overarchitecture it. Even an in-memory database seems too much. 
+- Bearing in mind that we want to add more cities in the future, instead of reading directly the file it will be good to configure a data folder and read all the existing files from there.
 
 ### Web API
 
@@ -128,6 +135,7 @@ I will create a REST API with 2 endpoints:
 - GET /activities
 - GET /recommendations
 using Pedestal (https://github.com/pedestal/pedestal)
+
 GraphQL could have been an interesting alternative here but as the size of the project is so small, the investment is hardly worth. Lacinia would have been my Clojure library.
 
 ## Step 3: Development 
@@ -164,6 +172,7 @@ It should take a couple of hours. And to be honest, I've spent the whole weekend
 - I'm a newbie in Clojure and it's the first time I faced problems that are very common (like loading resources or playing with dates) and that I would have sorted out easily in Java.
 - Writing this document is time consuming.
 - Understanding GeoJSON structure is another time consuming task that someone that is not familiar with the GIS domain have to do in order to finish the project.
+
 I would like to have added mandatory features in any given projet like input validation or metrics.
 Not really sure if I would have spent less time if I've had done it in Java or I'd have added more features.
 Anyway this is also useful information. I'm not a quick coder ;)
